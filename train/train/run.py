@@ -56,11 +56,9 @@ def train(dataset_path, train_conf, model_path, add_timestamp):
     # add a dense layer with relu activation
     # add an output layer (multiclass classification problem)
     model = Sequential([
-        Dense(train_conf.get("dense_dim"), input_shape=(768,), activation="relu"),
+        Dense(train_conf["dense_dim"], input_shape=(768,), activation="relu"),
         Dense(dataset.get_num_labels(), activation="softmax")
     ])
-
-    print(dataset.get_num_labels())
 
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
@@ -81,24 +79,27 @@ def train(dataset_path, train_conf, model_path, add_timestamp):
 
     # TODO: CODE HERE
     # create folder artefacts_path
-    folder_path = f"train/data/artefacts/{artefacts_path}"
+    # folder_path = f"train/data/artefacts/{artefacts_path}"
 
-    if not pathlib.Path.exists(folder_path):
-        os.makedirs(folder_path)
-
+    # if not pathlib.Path.exists(folder_path):
+    try:
+        os.makedirs(artefacts_path)
+    except:
+        pass
+    
     # TODO: CODE HERE
     # save model in artefacts folder, name model.h5
-    model.save(f"{folder_path}/model.h5")
+    model.save(f"{artefacts_path}/model.h5")
 
     # TODO: CODE HERE
     # save train_conf used in artefacts_path/params.json
     # ref: https://stackoverflow.com/questions/66653796/save-json-file-to-specific-folder-with-python
-    with open(f"{folder_path}/params.json", "w") as f:
+    with open(f"{artefacts_path}/params.json", "w") as f:
         json.dump(train_conf, f)
 
     # TODO: CODE HERE
     # save labels index in artefacts_path/labels_index.json
-    with open(f"{folder_path}/labels_index.json", "w") as f:
+    with open(f"{artefacts_path}/labels_index.json", "w") as f:
         json.dump(dataset.get_label_to_index_map(), f)
 
     # train_history.history is not JSON-serializable because it contains numpy arrays

@@ -244,7 +244,7 @@ class LocalTextCategorizationDataset(BaseTextCategorizationDataset):
 
     def get_train_batch(self):
         i = self.train_batch_index
-        next_x = self.x_train[i*self.batch_size : (i+1)*self.batch_size]
+        next_x = self.preprocess_text(self.x_train[i*self.batch_size : (i+1)*self.batch_size])
         next_y = self.y_train[i*self.batch_size : (i+1)*self.batch_size]
         self.train_batch_index = (self.train_batch_index + 1) % self._get_num_train_batches()
         return next_x, next_y
@@ -254,7 +254,7 @@ class LocalTextCategorizationDataset(BaseTextCategorizationDataset):
         it does the same as get_train_batch for the test set
         """
         i = self.test_batch_index
-        next_x = self.x_test[i*self.batch_size : (i+1)*self.batch_size]
+        next_x = self.preprocess_text(self.x_test[i*self.batch_size : (i+1)*self.batch_size])
         next_y = self.y_test[i*self.batch_size : (i+1)*self.batch_size]
         
         self.train_batch_index = (self.train_batch_index + 1) % self._get_num_train_batches()
